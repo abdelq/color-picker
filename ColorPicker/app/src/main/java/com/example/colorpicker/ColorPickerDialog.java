@@ -25,8 +25,7 @@ class ColorPickerDialog extends AlertDialog {
     private int r, g, b;
     private OnColorPickedListener onColorPickedListener;
 
-    public ColoredSeekBar redSeekBar, greenSeekBar, blueSeekBar;
-
+    private ColoredSeekBar redSeekBar, greenSeekBar, blueSeekBar;
 
     ColorPickerDialog(Context context) {
         super(context);
@@ -53,17 +52,11 @@ class ColorPickerDialog extends AlertDialog {
 
         //3.2 Titre et boutons
         setTitle("Choisir une couleur");
-        setButton(DialogInterface.BUTTON_POSITIVE, "Ok", new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 3.4 OnColorPickedListener
-                onColorPickedListener.onColorPicked(ColorPickerDialog.this, getColor());
-            }
+        setButton(DialogInterface.BUTTON_POSITIVE, "Ok", (dialog, which) -> {
+            // 3.4 OnColorPickedListener
+            onColorPickedListener.onColorPicked(ColorPickerDialog.this, getColor());
         });
-        setButton(DialogInterface.BUTTON_NEGATIVE, "cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-            }
+        setButton(DialogInterface.BUTTON_NEGATIVE, "cancel", (dialog, which) -> {
         });
         setCancelable(true);
 
@@ -83,7 +76,7 @@ class ColorPickerDialog extends AlertDialog {
     }
 
     // 3.6 + 3.7 SeekBar avec gradient rgb
-    public void setSeekBarSGB(View v){
+    private void setSeekBarSGB(View v){
         redSeekBar = v.findViewById(R.id.seekR);
         greenSeekBar = v.findViewById(R.id.seekG);
         blueSeekBar = v.findViewById(R.id.seekB);
@@ -100,15 +93,15 @@ class ColorPickerDialog extends AlertDialog {
         updateColors();
     }
 
-    public void updateColors(){
+    void updateColors(){
         redSeekBar.updateColor();
         greenSeekBar.updateColor();
         blueSeekBar.updateColor();
     }
 
-    public int getR(){ return r;}
-    public int getG(){ return g;}
-    public int getB(){ return b;}
+    int getR(){ return r;}
+    int getG(){ return g;}
+    int getB(){ return b;}
 
     @ColorInt int getColor(){
         // 3.3 Retourne la couleur présentement sélectionnée par le dialog.
@@ -188,13 +181,13 @@ class ColorPickerDialog extends AlertDialog {
 
         h = hPrime >= 0 ? 60*hPrime : 60*(hPrime+6);
         //TODO: La formule du s dans le devoir n'est pas exacte...
-        s = 100*delta/cMax;
-        v = 100*cMax/MAX_RGB_VALUE;
+        s = 100*(float) delta/cMax;
+        v = 100*(float) cMax/MAX_RGB_VALUE;
 
         return new int[]{(int) h, (int) s, (int) v};
     }
 
-    public void setOnColorPickedListener(OnColorPickedListener onColorPickedListener) {
+    private void setOnColorPickedListener(OnColorPickedListener onColorPickedListener) {
         // 3.4 OnColorPickedListener
         this.onColorPickedListener = onColorPickedListener;
     }
