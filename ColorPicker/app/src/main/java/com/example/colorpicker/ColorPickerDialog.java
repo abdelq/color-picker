@@ -127,7 +127,50 @@ class ColorPickerDialog extends AlertDialog {
          * Elle doit convertir un trio de valeurs HSL à un trio de valeurs RGB
          * */
 
-        return new int[3];
+        float hPrime, sPrime, vPrime;
+        hPrime = (float) h/60;
+        sPrime = (float) s/100;
+        vPrime = (float) v/100;
+
+        float c = sPrime*vPrime;
+        //TODO: C' dans l'énoncé??
+        float delta = vPrime-c;
+        float x = 1-Math.abs((hPrime%2)-1);
+
+        float rPrime, gPrime, bPrime;
+
+        if(0 <= hPrime && hPrime <= 1){
+            rPrime = 1;
+            gPrime = x;
+            bPrime = 0;
+        } else if(1 < hPrime && hPrime <= 2){
+            rPrime = x;
+            gPrime = 1;
+            bPrime = 0;
+        } else if(2 < hPrime && hPrime <= 3){
+            rPrime = 0;
+            gPrime = 1;
+            bPrime = x;
+        } else if(3 < hPrime && hPrime <= 4){
+            rPrime = 0;
+            gPrime = x;
+            bPrime = 1;
+        } else if(4 < hPrime && hPrime <= 5){
+            rPrime = x;
+            gPrime = 0;
+            bPrime = 1;
+        } else if(5 < hPrime && hPrime <= 6){
+            rPrime = 1;
+            gPrime = 0;
+            bPrime = x;
+        } else {
+            rPrime = 0;
+            gPrime = 0;
+            bPrime = 0;
+        }
+
+        return new int[]{(int) (MAX_RGB_VALUE*(c*rPrime+delta)), (int) (MAX_RGB_VALUE*(c*gPrime+delta)),
+                (int) (MAX_RGB_VALUE*(c*bPrime+delta))};
     }
 
     static private int[] RGBtoHSV(int r, int g, int b){
