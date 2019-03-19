@@ -131,11 +131,26 @@ class ColorPickerDialog extends AlertDialog {
     }
 
     static private int[] RGBtoHSV(int r, int g, int b){
-        /* IMPLÉMENTER CETTE MÉTHODE
-         * Elle doit convertir un trio de valeurs RGB à un trio de valeurs HSL
-         * */
+        // 3.8 RGB à HSV: elle doit convertir un trio de valeurs RGB à un trio de valeurs HSV
+        if(r == 0 && g == 0 && b == 0)
+            return new int[]{0, 0, 0};
 
-        return new int[3];
+        int cMax = Math.max(r, Math.max(g, b));
+        int cMin = Math.min(r, Math.min(g, b));
+
+        int delta = cMax-cMin;
+        float hPrime, h, s, v;
+
+        if(cMax == r) hPrime = delta == 0? 0 : (float) (g-b)/delta;
+        else if(cMax == g) hPrime = delta == 0? 2 : 2+(float) (b-r)/delta;
+        else hPrime = delta == 0 ? 4 : 4+(float)(r-g)/delta;
+
+        h = hPrime >= 0 ? 60*hPrime : 60*(hPrime+6);
+        //TODO: La formule du s dans le devoir n'est pas exacte...
+        s = 100*delta/cMax;
+        v = 100*cMax/MAX_RGB_VALUE;
+
+        return new int[]{(int) h, (int) s, (int) v};
     }
 
     public void setOnColorPickedListener(OnColorPickedListener onColorPickedListener) {
