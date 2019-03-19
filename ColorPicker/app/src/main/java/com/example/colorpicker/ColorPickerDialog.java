@@ -123,9 +123,7 @@ class ColorPickerDialog extends AlertDialog {
     }
 
     static private int[] HSVtoRGB(int h, int s, int v){
-        /* IMPLÉMENTER CETTE MÉTHODE
-         * Elle doit convertir un trio de valeurs HSL à un trio de valeurs RGB
-         * */
+        // 3.8.2 HSV à RGB: Elle doit convertir un trio de valeurs HSL à un trio de valeurs RGB
 
         float hPrime, sPrime, vPrime;
         hPrime = (float) h/60;
@@ -174,7 +172,7 @@ class ColorPickerDialog extends AlertDialog {
     }
 
     static private int[] RGBtoHSV(int r, int g, int b){
-        // 3.8 RGB à HSV: elle doit convertir un trio de valeurs RGB à un trio de valeurs HSV
+        // 3.8.1 RGB à HSV: elle doit convertir un trio de valeurs RGB à un trio de valeurs HSV
         if(r == 0 && g == 0 && b == 0)
             return new int[]{0, 0, 0};
 
