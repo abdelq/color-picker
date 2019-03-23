@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/headerHSV"
         app:layout_constraintVertical_weight="1" />
 
-    <SeekBar
+    <com.example.colorpicker.HSeekBar
         android:id="@+id/seekH"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
