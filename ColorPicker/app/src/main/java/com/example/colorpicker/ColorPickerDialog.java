@@ -5,11 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.SeekBar;
 
 import com.example.colorpicker.Views.AreaPicker;
 
@@ -25,7 +23,9 @@ class ColorPickerDialog extends AlertDialog {
     private int r, g, b;
     private OnColorPickedListener onColorPickedListener;
 
-    private ColoredSeekBar redSeekBar, greenSeekBar, blueSeekBar;
+    public ColoredSeekBar redSeekBar, greenSeekBar, blueSeekBar;
+    public HSeekBar hSeekBar;
+
 
     ColorPickerDialog(Context context) {
         super(context);
@@ -52,16 +52,27 @@ class ColorPickerDialog extends AlertDialog {
 
         //3.2 Titre et boutons
         setTitle("Choisir une couleur");
-        setButton(DialogInterface.BUTTON_POSITIVE, "Ok", (dialog, which) -> {
-            // 3.4 OnColorPickedListener
-            onColorPickedListener.onColorPicked(ColorPickerDialog.this, getColor());
+        setButton(DialogInterface.BUTTON_POSITIVE, "Ok", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 3.4 OnColorPickedListener
+                onColorPickedListener.onColorPicked(ColorPickerDialog.this, getColor());
+            }
         });
-        setButton(DialogInterface.BUTTON_NEGATIVE, "cancel", (dialog, which) -> {
+        setButton(DialogInterface.BUTTON_NEGATIVE, "cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+            }
         });
         setCancelable(true);
 
         // Initialize SV gradient
         seekSV = v.findViewById(R.id.seekSV);
+        redSeekBar = v.findViewById(R.id.seekR);
+        greenSeekBar = v.findViewById(R.id.seekG);
+        blueSeekBar = v.findViewById(R.id.seekB);
+        hSeekBar = v.findViewById(R.id.seekH);
+
         saturationValueGradient = new SaturationValueGradient();
         seekSV.setInsetDrawable(saturationValueGradient);
 
@@ -69,39 +80,55 @@ class ColorPickerDialog extends AlertDialog {
         saturationValueGradient.setColor(Color.RED);
 
         // 3.6 + 3.7
-        setSeekBarSGB(v);
+        setSeekBarSGB();
+
+        hSeekBar.setHSeekBar(this, redSeekBar, greenSeekBar,
+                blueSeekBar, saturationValueGradient, seekSV);
+
+        seekSV.setBars(redSeekBar, greenSeekBar, blueSeekBar, hSeekBar);
 
         // Default color
         setColor(getContext().getColor(R.color.defaultColor));
     }
 
     // 3.6 + 3.7 SeekBar avec gradient rgb
-    private void setSeekBarSGB(View v){
-        redSeekBar = v.findViewById(R.id.seekR);
-        greenSeekBar = v.findViewById(R.id.seekG);
-        blueSeekBar = v.findViewById(R.id.seekB);
+    public void setSeekBarSGB(){
 
-        redSeekBar.setColorPickerDialog(this);
+        redSeekBar.setElements(this, hSeekBar, seekSV);
         redSeekBar.setColorSeekBar(1, 0, 0);
 
-        greenSeekBar.setColorPickerDialog(this);
+        greenSeekBar.setElements(this, hSeekBar, seekSV);
         greenSeekBar.setColorSeekBar(0, 1, 0);
 
-        blueSeekBar.setColorPickerDialog(this);
+        blueSeekBar.setElements(this, hSeekBar, seekSV);
         blueSeekBar.setColorSeekBar(0, 0, 1);
 
         updateColors();
     }
 
-    void updateColors(){
+    public void updateColors(){
         redSeekBar.updateColor();
         greenSeekBar.updateColor();
         blueSeekBar.updateColor();
     }
 
-    int getR(){ return r;}
-    int getG(){ return g;}
-    int getB(){ return b;}
+    public int getR(){ return r;}
+    public int getG(){ return g;}
+    public int getB(){ return b;}
+
+    public float getH(){ return RGBtoHSV(r,g,b)[0]; }
+    public float getS(){ return RGBtoHSV(r,g,b)[1]; }
+    public float getV(){ return RGBtoHSV(r,g,b)[2]; }
+
+    public int getRFromHSV(float h, float s, float v) {
+        return HSVtoRGB(h,s,v)[0];
+    }
+    public int getGFromHSV(float h, float s, float v) {
+        return HSVtoRGB(h,s,v)[1];
+    }
+    public int getBFromHSV(float h, float s, float v) {
+        return HSVtoRGB(h,s,v)[2];
+    }
 
     @ColorInt int getColor(){
         // 3.3 Retourne la couleur présentement sélectionnée par le dialog.
@@ -115,13 +142,13 @@ class ColorPickerDialog extends AlertDialog {
         b = Color.blue(newColor);
     }
 
-    static private int[] HSVtoRGB(int h, int s, int v){
+    static private int[] HSVtoRGB(float h, float s, float v){
         // 3.8.2 HSV à RGB: Elle doit convertir un trio de valeurs HSL à un trio de valeurs RGB
 
         float hPrime, sPrime, vPrime;
-        hPrime = (float) h/60;
-        sPrime = (float) s/100;
-        vPrime = (float) v/100;
+        hPrime = h/60;
+        sPrime = s/100;
+        vPrime = v/100;
 
         float c = sPrime*vPrime;
         //TODO: C' dans l'énoncé??
@@ -164,10 +191,10 @@ class ColorPickerDialog extends AlertDialog {
                 (int) (MAX_RGB_VALUE*(c*bPrime+delta))};
     }
 
-    static private int[] RGBtoHSV(int r, int g, int b){
+    static private float[] RGBtoHSV(int r, int g, int b){
         // 3.8.1 RGB à HSV: elle doit convertir un trio de valeurs RGB à un trio de valeurs HSV
         if(r == 0 && g == 0 && b == 0)
-            return new int[]{0, 0, 0};
+            return new float[]{0, 0, 0};
 
         int cMax = Math.max(r, Math.max(g, b));
         int cMin = Math.min(r, Math.min(g, b));
@@ -181,13 +208,13 @@ class ColorPickerDialog extends AlertDialog {
 
         h = hPrime >= 0 ? 60*hPrime : 60*(hPrime+6);
         //TODO: La formule du s dans le devoir n'est pas exacte...
-        s = 100*(float) delta/cMax;
-        v = 100*(float) cMax/MAX_RGB_VALUE;
+        s = 100*delta/cMax;
+        v = 100*cMax/MAX_RGB_VALUE;
 
-        return new int[]{(int) h, (int) s, (int) v};
+        return new float[]{ h, s, v};
     }
 
-    private void setOnColorPickedListener(OnColorPickedListener onColorPickedListener) {
+    public void setOnColorPickedListener(OnColorPickedListener onColorPickedListener) {
         // 3.4 OnColorPickedListener
         this.onColorPickedListener = onColorPickedListener;
     }
@@ -196,3 +223,4 @@ class ColorPickerDialog extends AlertDialog {
         void onColorPicked(ColorPickerDialog colorPickerDialog, @ColorInt int color);
     }
 }
+
