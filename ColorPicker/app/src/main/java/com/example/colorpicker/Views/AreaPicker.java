@@ -11,6 +11,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.colorpicker.ColoredSeekBar;
+import com.example.colorpicker.HSeekBar;
 import com.example.colorpicker.R;
 
 
@@ -22,6 +24,9 @@ public class AreaPicker extends View {
     private Paint thumb_paint;
 
     private float x, y;
+    private float h;
+    private ColoredSeekBar red, green, blue;
+    private HSeekBar hBar;
 
     public AreaPicker(Context context) {
         super(context);
@@ -49,6 +54,9 @@ public class AreaPicker extends View {
         thumbRadius = getResources().getInteger(R.integer.thumb_radius);
         padding = thumbRadius * 2;
 
+        x = 0;
+        y = 1;
+
         // On utilise un InsetDrawable comme arrière-plan, pour que, lorsque l'usager fournira son
         // propre Drawable à afficher dans le plan de sélection, celui-ci ne se rendent pas
         // jusqu'au bord du View, mais plutôt laisse une petite marge pour que le le marqueur de
@@ -75,6 +83,24 @@ public class AreaPicker extends View {
         return true;
     }
 
+    public void setBars(ColoredSeekBar red, ColoredSeekBar green,
+                                   ColoredSeekBar blue, HSeekBar hBar) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.hBar = hBar;
+    }
+
+    public void setHValue(float h) {
+        this.h = h;
+    }
+
+    void updateColoredSeekBars(float h, float s, float v) {
+        red.setProgress(hBar.getR(h,s,v));
+        green.setProgress(hBar.getG(h,s,v));
+        blue.setProgress(hBar.getB(h,s,v));
+    }
+
     public void setMaxX(int newMaxX){
         /* IMPLÉMENTER CETTE MÉTHODE */
     }
@@ -93,12 +119,16 @@ public class AreaPicker extends View {
         return 0;
     }
 
-    public void setPickedX(int newX){
-        /* IMPLÉMENTER CETTE MÉTHODE */
+    //si x est changé avec les seekBarsRGB
+    public void setPickedX(float newX){
+        this.x = newX;
+        onChange(false);
     }
 
-    public void setPickedY(int newY){
-        /* IMPLÉMENTER CETTE MÉTHODE */
+    //si y est changé avec les seekBarsRGB
+    public void setPickedY(float newY){
+        this.y = newY;
+        onChange(false);
     }
 
     // Cette fonction doit être appelée immédiatement après que la coordonnée
@@ -107,6 +137,13 @@ public class AreaPicker extends View {
     private void onChange(boolean fromUser){
         if(onPickedListener != null){
             onPickedListener.onPicked(this, getPickedX(), getPickedY(), fromUser);
+        }
+        float h = this.h;
+        float s = x*100;
+        float v = 100 - y*100;
+
+        if (fromUser) {
+            updateColoredSeekBars(h,s,v);
         }
 
         invalidate();
@@ -147,3 +184,4 @@ public class AreaPicker extends View {
         void onPicked(AreaPicker areaPicker, int x, int y, boolean fromUser);
     }
 }
+
