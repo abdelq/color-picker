@@ -3,6 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-
     <color name="defaultColor">#000000</color>
+
+    <array name="rainbow">
+        <item>#FFFF0000</item>
+        <item>#FFFFFF00</item>
+        <item>#FF00FF00</item>
+        <item>#FF00FFFF</item>
+        <item>#FF0000FF</item>
+        <item>#FFFF00FF</item>
+        <item>#FFFF0000</item>
+    </array>
 </resources>
