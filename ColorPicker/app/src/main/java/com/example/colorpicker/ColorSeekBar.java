@@ -29,7 +29,7 @@ class ColorSeekBar extends AppCompatSeekBar {
                 @ColorInt int color = dialog.getColor();
 
                 int[] rgb = {Color.red(color), Color.green(color), Color.blue(color)};
-                float[] hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]); // XXX
+                float[] hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
                 if (seekColor == Color.RED) {
                     rgb[0] = progress;
                 } else if (seekColor == Color.GREEN) {
@@ -41,10 +41,11 @@ class ColorSeekBar extends AppCompatSeekBar {
                 dialog.setColor(rgb[0], rgb[1], rgb[2]);
                 if (fromUser) {
                     dialog.setProgress(hsv[0]);
-                    dialog.setPick(hsv[1] / 100, (100 - hsv[2]) / 100); // XXX
+                    dialog.setPick(hsv[1] / 100, (100 - hsv[2]) / 100);
                 }
 
                 updateGradient();
+                dialog.updateAlphaGradient();
             }
 
             @Override

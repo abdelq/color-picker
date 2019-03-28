@@ -60,11 +60,11 @@ public class AreaPicker extends View {
     }
 
     private int getPickedX() {
-        return (int) (x * 100); // XXX
+        return (int) (x * 100);
     }
 
     private int getPickedY() {
-        return (int) (100 - y * 100); // XXX
+        return (int) (100 - (y * 100));
     }
 
     void setPick(float x, float y) {

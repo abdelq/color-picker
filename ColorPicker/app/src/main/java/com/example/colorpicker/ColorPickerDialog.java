@@ -4,23 +4,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.ColorInt;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import static android.graphics.Color.rgb;
+import static android.graphics.Color.*;
 import static android.view.View.inflate;
 
 class ColorPickerDialog extends AlertDialog {
     private final static int MAX_RGB_VALUE = 255,
             MAX_H_VALUE = 360, MAX_SV_VALUE = 100;
 
-    private @ColorInt int color;
+    private @ColorInt int color = Color.BLACK;
     private OnColorPickedListener onColorPickedListener;
 
     private HueSeekBar seekH;
     private AreaPicker seekSV;
     private ColorSeekBar seekR, seekG, seekB;
+    private AlphaSeekBar seekA;
 
     ColorPickerDialog(Context context) {
         super(context);
@@ -44,18 +47,19 @@ class ColorPickerDialog extends AlertDialog {
         seekR = v.findViewById(R.id.seekR);
         seekG = v.findViewById(R.id.seekG);
         seekB = v.findViewById(R.id.seekB);
+        seekA = v.findViewById(R.id.seekA);
 
         seekR.init(this, Color.RED);
         seekG.init(this, Color.GREEN);
         seekB.init(this, Color.BLUE);
 
-        seekH.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekH.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 seekSV.updateGradient(HSVtoRGB(progress, MAX_SV_VALUE, MAX_SV_VALUE));
 
                 if (fromUser) {
-                    float[] hsv = RGBtoHSV(Color.red(color), Color.green(color), Color.blue(color));
+                    float[] hsv = RGBtoHSV(red(color), green(color), blue(color));
                     setProgress(HSVtoRGB(progress, hsv[1], hsv[2]));
                 }
             }
@@ -74,9 +78,27 @@ class ColorPickerDialog extends AlertDialog {
                 setProgress(HSVtoRGB(seekH.getProgress(), x, y));
             }
         });
+
+        seekA.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setColor(progress);
+                ((GradientDrawable) seekBar.getProgressDrawable()).setColors(new int[]{
+                        Color.TRANSPARENT, color | Color.BLACK
+                });
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
-    static int[] HSVtoRGB(float h, float s, float v) {
+    private static int[] HSVtoRGB(float h, float s, float v) {
         float hPrime = h / (MAX_H_VALUE / 6f);
         float sPrime = s / MAX_SV_VALUE;
         float vPrime = v / MAX_SV_VALUE;
@@ -147,10 +169,14 @@ class ColorPickerDialog extends AlertDialog {
     }
 
     void setColor(int red, int green, int blue) {
-        this.color = rgb(red, green, blue);
+        color = argb(alpha(color), red, green, blue);
     }
 
-    void setProgress(int[] rgb) {
+    private void setColor(int alpha) {
+        color = argb(alpha, red(color), green(color), blue(color));
+    }
+
+    private void setProgress(int[] rgb) {
         seekR.setProgress(rgb[0]);
         seekG.setProgress(rgb[1]);
         seekB.setProgress(rgb[2]);
@@ -162,6 +188,10 @@ class ColorPickerDialog extends AlertDialog {
 
     void setPick(float x, float y) {
         seekSV.setPick(x, y);
+    }
+
+    void updateAlphaGradient() {
+        seekA.updateGradient(color);
     }
 
     void setOnColorPickedListener(OnColorPickedListener listener) {
