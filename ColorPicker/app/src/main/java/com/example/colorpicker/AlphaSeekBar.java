@@ -1,8 +1,15 @@
 package com.example.colorpicker;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
@@ -21,6 +28,8 @@ class AlphaSeekBar extends AppCompatSeekBar {
 
         setProgress(0xFF);
         setProgressDrawable(drawable);
+
+        setBackground(new InsetDrawable(context.getDrawable(R.drawable.checker), getPaddingStart()));
     }
 
     void updateGradient(@ColorInt int color) {
