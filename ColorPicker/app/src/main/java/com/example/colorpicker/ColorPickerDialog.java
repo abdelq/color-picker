@@ -10,14 +10,18 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import static android.graphics.Color.*;
+import static android.graphics.Color.alpha;
+import static android.graphics.Color.argb;
+import static android.graphics.Color.blue;
+import static android.graphics.Color.green;
+import static android.graphics.Color.red;
 import static android.view.View.inflate;
 
 class ColorPickerDialog extends AlertDialog {
     private final static int MAX_RGB_VALUE = 255,
             MAX_H_VALUE = 360, MAX_SV_VALUE = 100;
 
-    private @ColorInt int color = Color.BLACK;
+    private int color = Color.BLACK;
     private OnColorPickedListener onColorPickedListener;
 
     private HueSeekBar seekH;
@@ -164,7 +168,8 @@ class ColorPickerDialog extends AlertDialog {
         };
     }
 
-    @ColorInt int getColor() {
+    @ColorInt
+    int getColor() {
         return color;
     }
 
