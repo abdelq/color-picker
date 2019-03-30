@@ -17,6 +17,10 @@ import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 import static android.view.View.inflate;
 
+/**
+ * La classe ColorPickerDialog fournit des méthodes pour l'affichage du popup
+ * qui permet à l'usager de choisir sa couleur.
+ */
 class ColorPickerDialog extends AlertDialog {
     private final static int MAX_RGB_VALUE = 255,
             MAX_H_VALUE = 360, MAX_SV_VALUE = 100;
@@ -29,15 +33,20 @@ class ColorPickerDialog extends AlertDialog {
     private ColorSeekBar seekR, seekG, seekB;
     private AlphaSeekBar seekA;
 
+    /*
+     * Initialise le popup et les éléments qui en font partie
+     *
+     * @param context
+     */
     ColorPickerDialog(Context context) {
         super(context);
         setCancelable(true);
 
-        // Initialize dialog
+        // Initialise le popup
         View v = inflate(context, R.layout.dialog_picker, null);
         setView(v);
 
-        // Title & Buttons
+        // Titre et boutons
         Resources res = context.getResources();
         setTitle(res.getString(R.string.pick_color));
         setButton(res.getString(android.R.string.ok), (dialog, which) ->
@@ -45,7 +54,7 @@ class ColorPickerDialog extends AlertDialog {
         setButton2(res.getString(android.R.string.cancel), (dialog, which) -> {
         });
 
-        // Initialize seek bars
+        // Initialise les barres
         seekH = v.findViewById(R.id.seekH);
         seekSV = v.findViewById(R.id.seekSV);
         seekR = v.findViewById(R.id.seekR);
@@ -102,6 +111,14 @@ class ColorPickerDialog extends AlertDialog {
         });
     }
 
+    /*
+     * Fait la conversion des valeurs HSV en RGB
+     *
+     * @param h
+     * @param s
+     * @param v
+     * @return un tableau qui contient les valeurs RGB
+     */
     private static int[] HSVtoRGB(float h, float s, float v) {
         float hPrime = h / (MAX_H_VALUE / 6f);
         float sPrime = s / MAX_SV_VALUE;
@@ -145,6 +162,14 @@ class ColorPickerDialog extends AlertDialog {
         };
     }
 
+    /*
+     * Fait la conversion des valeurs RGB en HSV
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @return un tableau qui contient les valeurs HSV
+     */
     static float[] RGBtoHSV(int r, int g, int b) {
         int cMax = Math.max(r, Math.max(g, b));
         int cMin = Math.min(r, Math.min(g, b));
@@ -173,28 +198,59 @@ class ColorPickerDialog extends AlertDialog {
         return color;
     }
 
+    /*
+     * Met à jour la couleur choisie
+     *
+     * @param red
+     * @param green
+     * @param blue
+     */
     void setColor(int red, int green, int blue) {
         color = argb(alpha(color), red, green, blue);
     }
 
+    /*
+     * Met à jour la couleur choisie
+     *
+     * @param alpha
+     */
     private void setColor(int alpha) {
         color = argb(alpha, red(color), green(color), blue(color));
     }
 
+    /*
+     * Met à jour le progrès des barres RGB
+     *
+     * @param rgb tableau contenant les valeurs RGB
+     */
     private void setProgress(int[] rgb) {
         seekR.setProgress(rgb[0]);
         seekG.setProgress(rgb[1]);
         seekB.setProgress(rgb[2]);
     }
 
+    /*
+     * Met à jour le progrès de la barre de teinte (H)
+     *
+     * @param hue la valeur de la teinte
+     */
     void setProgress(float hue) {
         seekH.setProgress((int) hue);
     }
 
+    /*
+     * Met à jour les valeurs x et y de l'AreaPicker
+     *
+     * @param x
+     * @param y
+     */
     void setPick(float x, float y) {
         seekSV.setPick(x, y);
     }
 
+    /*
+     * Met à jour la couleur du gradient de la barre de l'alpha
+     */
     void updateAlphaGradient() {
         seekA.updateGradient(color);
     }
@@ -207,4 +263,3 @@ class ColorPickerDialog extends AlertDialog {
         void onColorPicked(ColorPickerDialog colorPickerDialog, @ColorInt int color);
     }
 }
-

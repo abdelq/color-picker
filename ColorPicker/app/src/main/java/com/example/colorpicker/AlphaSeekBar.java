@@ -10,9 +10,19 @@ import android.util.AttributeSet;
 
 import static android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT;
 
+/**
+ * La classe AlphaSeekBar fournit des méthodes pour une barre qui
+ * permet à l'usager de choisir la transparence de la couleur.
+ */
 class AlphaSeekBar extends AppCompatSeekBar {
     private GradientDrawable drawable;
 
+    /*
+     * Initialise la barre
+     *
+     * @param context
+     * @param attrs
+     */
     AlphaSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -25,6 +35,11 @@ class AlphaSeekBar extends AppCompatSeekBar {
                 getPaddingLeft(), -1, getPaddingRight(), -1));
     }
 
+    /*
+     * Met à jour la couleur du gradient de la barre
+     *
+     * @param color couleur choisie par l'usager
+     */
     void updateGradient(@ColorInt int color) {
         drawable.setColors(new int[]{
                 Color.TRANSPARENT, color | Color.BLACK

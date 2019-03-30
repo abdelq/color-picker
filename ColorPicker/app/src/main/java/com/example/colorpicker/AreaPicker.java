@@ -13,6 +13,10 @@ import android.view.View;
 
 import static android.graphics.Color.rgb;
 
+/**
+ * La classe AreaPicker fournit des méthodes qui traitent le déplacement du
+ * marqueur à l'intérieur de l'espace créé par le SaturationValueGradient.
+ */
 public class AreaPicker extends View {
     private float x = 0, y = 1;
 
@@ -21,6 +25,12 @@ public class AreaPicker extends View {
     private SaturationValueGradient gradient;
     private OnPickedListener onPickedListener;
 
+    /*
+     * Initialise le marqueur et son arrière-plan
+     *
+     * @param context
+     * @param attrs
+     */
     AreaPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -41,6 +51,11 @@ public class AreaPicker extends View {
         setBackground(new InsetDrawable(gradient, padding));
     }
 
+    /*
+     * Met à jour la couleur de l'arrière-plan
+     *
+     * @param rgb couleur choisie par l'usager
+     */
     void updateGradient(int[] rgb) {
         gradient.setColor(rgb(rgb[0], rgb[1], rgb[2]));
     }
@@ -59,14 +74,26 @@ public class AreaPicker extends View {
         return true;
     }
 
+    /*
+     * @return la valeur du x choisi
+     */
     private int getPickedX() {
         return (int) (x * 100);
     }
 
+    /*
+     * @return la valeur du y choisi
+     */
     private int getPickedY() {
         return (int) (100 - (y * 100));
     }
 
+    /*
+     * Change les valeurs x et y du marqueur
+     *
+     * @param x nouveau x
+     * @param y nouveau y
+     */
     void setPick(float x, float y) {
         this.x = x;
         this.y = y;

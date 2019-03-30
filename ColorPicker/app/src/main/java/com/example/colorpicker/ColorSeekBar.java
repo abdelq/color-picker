@@ -11,11 +11,21 @@ import android.widget.SeekBar;
 import static android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT;
 import static com.example.colorpicker.ColorPickerDialog.RGBtoHSV;
 
+/**
+ * La classe ColorSeekBar fournit les méthodes qui initialisent et mettent
+ * à jour des barres qui permettent la selection des valeurs R,G ou B.
+ */
 class ColorSeekBar extends AppCompatSeekBar {
     private @ColorInt int seekColor;
     private GradientDrawable drawable;
     private ColorPickerDialog dialog;
 
+    /*
+     * Initialise la barre de sélection
+     *
+     * @param context
+     * @param attrs
+     */
     ColorSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -65,6 +75,9 @@ class ColorSeekBar extends AppCompatSeekBar {
         drawable.setColors(new int[]{Color.BLACK, seekColor});
     }
 
+    /*
+     * Met à jour la couleur du gradient de la barre
+     */
     void updateGradient() {
         @ColorInt int color = dialog.getColor();
 

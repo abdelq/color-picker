@@ -9,6 +9,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+/**
+ * La classe MainActivity affiche un bouton qui permet de choisir une couleur
+ * et un carré dans lequel la couleur choisie est démontrée.
+ * Lorsque le bouton est cliqué, un popup apparait pour faire la sélection de
+ * la couleur.
+ */
 class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

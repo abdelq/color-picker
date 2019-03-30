@@ -7,6 +7,10 @@ import android.util.AttributeSet;
 
 import static android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT;
 
+/**
+ * La classe HueSeekBar initialise une barre qui permet la selection de
+ * la valeur de la teinte (H), son gradient étant un arc-en-ciel.
+ */
 class HueSeekBar extends AppCompatSeekBar {
     HueSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);

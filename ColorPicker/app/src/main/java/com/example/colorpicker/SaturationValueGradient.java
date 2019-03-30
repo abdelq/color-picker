@@ -5,6 +5,10 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.ColorInt;
 
+/**
+ * La classe SaturationValueGradient fournit les méthodes qui initialisent
+ * et mettent à jour un espace qui affiche un dégradé 2D.
+ */
 class SaturationValueGradient extends LayerDrawable {
     private GradientDrawable saturationGradient;
 
@@ -39,6 +43,11 @@ class SaturationValueGradient extends LayerDrawable {
         return new GradientDrawable[]{saturationGradient, valueGradient};
     }
 
+    /*
+     * Met à jour la couleur du gradient
+     *
+     * @param color couleur choisie par l'usager
+     */
     void setColor(@ColorInt int color) {
         saturationGradient.setColors(new int[]{Color.WHITE, color});
     }
