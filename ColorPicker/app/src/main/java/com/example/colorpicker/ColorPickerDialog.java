@@ -249,9 +249,12 @@ class ColorPickerDialog extends AlertDialog {
     }
 
     /*
-     * Met à jour la couleur du gradient de la barre de l'alpha
+     * Met à jour la couleur du gradient des barres
      */
-    void updateAlphaGradient() {
+    void updateGradients() {
+        seekR.updateGradient();
+        seekG.updateGradient();
+        seekB.updateGradient();
         seekA.updateGradient(color);
     }
 

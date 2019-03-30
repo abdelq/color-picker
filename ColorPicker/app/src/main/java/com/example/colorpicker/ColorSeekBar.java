@@ -49,13 +49,11 @@ class ColorSeekBar extends AppCompatSeekBar {
                 }
 
                 dialog.setColor(rgb[0], rgb[1], rgb[2]);
+                dialog.updateGradients();
                 if (fromUser) {
                     dialog.setProgress(hsv[0]);
                     dialog.setPick(hsv[1] / 100, (100 - hsv[2]) / 100);
                 }
-
-                updateGradient();
-                dialog.updateAlphaGradient();
             }
 
             @Override
