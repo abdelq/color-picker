@@ -33,10 +33,8 @@ class ColorPickerDialog extends AlertDialog {
     private ColorSeekBar seekR, seekG, seekB;
     private AlphaSeekBar seekA;
 
-    /*
+    /**
      * Initialise le popup et les éléments qui en font partie
-     *
-     * @param context
      */
     ColorPickerDialog(Context context) {
         super(context);
@@ -111,13 +109,13 @@ class ColorPickerDialog extends AlertDialog {
         });
     }
 
-    /*
+    /**
      * Fait la conversion des valeurs HSV en RGB
      *
-     * @param h
-     * @param s
-     * @param v
-     * @return un tableau qui contient les valeurs RGB
+     * @param h teinte
+     * @param s saturation
+     * @param v valeur
+     * @return tableau qui contient les valeurs RGB
      */
     private static int[] HSVtoRGB(float h, float s, float v) {
         float hPrime = h / (MAX_H_VALUE / 6f);
@@ -162,12 +160,12 @@ class ColorPickerDialog extends AlertDialog {
         };
     }
 
-    /*
+    /**
      * Fait la conversion des valeurs RGB en HSV
      *
-     * @param r
-     * @param g
-     * @param b
+     * @param r rouge
+     * @param g vert
+     * @param b bleu
      * @return un tableau qui contient les valeurs HSV
      */
     static float[] RGBtoHSV(int r, int g, int b) {
@@ -198,27 +196,27 @@ class ColorPickerDialog extends AlertDialog {
         return color;
     }
 
-    /*
+    /**
      * Met à jour la couleur choisie
      *
-     * @param red
-     * @param green
-     * @param blue
+     * @param red composante rouge
+     * @param green composante verte
+     * @param blue composante bleue
      */
     void setColor(int red, int green, int blue) {
         color = argb(alpha(color), red, green, blue);
     }
 
-    /*
+    /**
      * Met à jour la couleur choisie
      *
-     * @param alpha
+     * @param alpha composante de transparence
      */
     private void setColor(int alpha) {
         color = argb(alpha, red(color), green(color), blue(color));
     }
 
-    /*
+    /**
      * Met à jour le progrès des barres RGB
      *
      * @param rgb tableau contenant les valeurs RGB
@@ -229,7 +227,7 @@ class ColorPickerDialog extends AlertDialog {
         seekB.setProgress(rgb[2]);
     }
 
-    /*
+    /**
      * Met à jour le progrès de la barre de teinte (H)
      *
      * @param hue la valeur de la teinte
@@ -238,17 +236,17 @@ class ColorPickerDialog extends AlertDialog {
         seekH.setProgress((int) hue);
     }
 
-    /*
+    /**
      * Met à jour les valeurs x et y de l'AreaPicker
      *
-     * @param x
-     * @param y
+     * @param x position horizontale
+     * @param y position verticale
      */
     void setPick(float x, float y) {
         seekSV.setPick(x, y);
     }
 
-    /*
+    /**
      * Met à jour la couleur du gradient des barres
      */
     void updateGradients() {

@@ -20,11 +20,8 @@ class ColorSeekBar extends AppCompatSeekBar {
     private GradientDrawable drawable;
     private ColorPickerDialog dialog;
 
-    /*
+    /**
      * Initialise la barre de sélection
-     *
-     * @param context
-     * @param attrs
      */
     ColorSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -66,6 +63,12 @@ class ColorSeekBar extends AppCompatSeekBar {
         });
     }
 
+    /**
+     * Initialise le gradient de base pour la barre de couleur
+     *
+     * @param dialog dialogue de choix de couleur
+     * @param color couleur de la barre
+     */
     void init(ColorPickerDialog dialog, @ColorInt int color) {
         this.dialog = dialog;
         this.seekColor = color;
@@ -73,7 +76,7 @@ class ColorSeekBar extends AppCompatSeekBar {
         drawable.setColors(new int[]{Color.BLACK, seekColor});
     }
 
-    /*
+    /**
      * Met à jour la couleur du gradient de la barre
      */
     void updateGradient() {

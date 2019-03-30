@@ -43,7 +43,7 @@ class SaturationValueGradient extends LayerDrawable {
         return new GradientDrawable[]{saturationGradient, valueGradient};
     }
 
-    /*
+    /**
      * Met à jour la couleur du gradient
      *
      * @param color couleur choisie par l'usager
